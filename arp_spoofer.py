@@ -31,6 +31,7 @@ def restore(target_ip, spoof_ip):
     dest_mac = get_mac(target_ip)
     src_mac = get_mac(spoof_ip)
     packet = scapy.ARP(op=2, pdst=target_ip, hwdst=dest_mac, psrc=spoof_ip, hwsrc=src_mac)
+    print(f"[+] Restoring ARP cahse for {target_ip} and {spoof_ip}")
     scapy.send(packet, verbose=False, count=4)
 
 
