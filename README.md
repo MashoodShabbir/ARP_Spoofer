@@ -54,6 +54,7 @@ When the script is stopped with CTRL + C, it will restore the ARP cache on the t
 
 ## Arguments
 -t, --target: Specifies the target IP address whose ARP cache will be spoofed.
+
 -s, --spoof: Specifies the IP address to impersonate.
 
 
