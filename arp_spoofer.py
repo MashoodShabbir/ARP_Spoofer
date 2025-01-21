@@ -33,7 +33,7 @@ def restore(target_ip, spoof_ip):
     src_mac = get_mac(spoof_ip)
     packet = scapy.ARP(op=2, pdst=target_ip, hwdst=dest_mac, psrc=spoof_ip, hwsrc=src_mac)
     ether_frame = scapy.Ether(dst=dest_mac)/packet
-    print(f"[+] Restoring ARP cache for {spoof_ip}")
+    print(f"[+] Restoring ARP cache for {target_ip}")
     scapy.sendp(ether_frame, verbose=False, count=4)
 
 
@@ -49,4 +49,5 @@ try:
 except KeyboardInterrupt: 
     print(" [+] Detected CRT + C ........ Restoring ARP")
     restore(options.spoof_ip, options.target_ip)
+    restore(options.target_ip, options.spoof_ip)
     
